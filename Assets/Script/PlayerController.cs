@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -149,7 +150,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    //Pass Bridge
+    //Pass Bridge 
     private IEnumerator PassBrigde()
     {
         transform.DOLocalMove(new Vector3(0, 0, 198), 2);
@@ -176,12 +177,12 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.35f);
+            yield return new WaitForSeconds(0.1f);
             if (foodList.Count > 0)
             {
                 Transform food = foodList.Pop();
                 food.SetParent(parent, true);
-                food.DOMove(new Vector3(0.5f, y += 0.2f, 250), 0.3f).OnComplete(() =>
+                food.DOMove(new Vector3(0.5f, y += 0.2f, 250), 0.4f).OnComplete(() =>
                 {
                     feedingPokemon.feed.SetBool("isFeeded", true);
                     Instantiate(particle, new Vector3(pokemon.transform.position.x, pokemon.transform.position.y, pokemon.transform.position.z), Quaternion.identity);
@@ -193,6 +194,14 @@ public class PlayerController : MonoBehaviour
                     });
                     canvas.transform.position = new Vector3(canvas.transform.position.x, transform.position.y + (size - 1) * 5f, canvas.transform.position.z);
                 });
+            }
+
+            if (foodList.Count == 0)
+            {
+                DOVirtual.DelayedCall(1f, (() =>
+                {
+                    SceneManager.LoadScene("Battle");
+                }));
             }
         }
     }

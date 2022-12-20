@@ -96,9 +96,10 @@ public class PokemonBattle : MonoBehaviour
         yield return new WaitForSeconds(1f);
         target.GetComponent<PokemonBattle>().TakeDamage(damedame);
         Instantiate(punchExplode, transform, false);
-        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(CinemachineVCam.Shake());
+        yield return new WaitForSeconds(1f);
         animAttack.SetBool(Punch, false);
-        transform.DOLocalMoveZ(0.5f, 0.2f);
+        transform.DOLocalMoveZ(0.5f, 1f);
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -107,14 +108,17 @@ public class PokemonBattle : MonoBehaviour
         GameObject castSkill = Instantiate(skill, transform, false);
         yield return new WaitForSeconds(1f);
         animAttack.SetBool(Skill, true);
-        yield return new WaitForSeconds(0.5f);
-        castSkill.transform.DOLocalMoveZ(2f, 0.6f).OnComplete(() =>
+        yield return new WaitForSeconds(0.8f);
+        castSkill.transform.DOLocalMoveZ(1.7f, 0.6f).OnComplete(() =>
         {
-            Instantiate(skillExplode, transform, false);
-            target.GetComponent<PokemonBattle>().TakeDamage(damedame);
-            animAttack.SetBool(Skill, false);
             castSkill.SetActive(false);
+            Instantiate(skillExplode, transform, false);
+            StartCoroutine(CinemachineVCam.Shake());
+            target.GetComponent<PokemonBattle>().TakeDamage(damedame);
         });
+        yield return new WaitForSeconds(2f);
+        animAttack.SetBool(Skill, false);
+        castSkill.SetActive(false);
     }
 }
 

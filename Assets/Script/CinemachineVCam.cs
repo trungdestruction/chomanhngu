@@ -29,6 +29,23 @@ public class CinemachineVCam : MonoBehaviour
         }
     }
 
+    public static IEnumerator Shake()
+    {
+        Vector3 originalPos = acvtiveCamera.transform.position;
+        float elapsed = 0;
+
+        while (elapsed < 0.5f)
+        {
+            float x = Random.Range(-0.01f, 0.01f);
+            float y = Random.Range(-0.01f, 0.01f);
+
+            acvtiveCamera.transform.position = new Vector3(acvtiveCamera.transform.position.x + x,acvtiveCamera.transform.position.y + y, acvtiveCamera.transform.position.z);
+            elapsed += Time.deltaTime;
+            yield return 0;
+        }
+        acvtiveCamera.transform.position = originalPos;
+    }
+
     public static void Register(CinemachineVirtualCamera camera)
     {
         cameras.Add(camera);
